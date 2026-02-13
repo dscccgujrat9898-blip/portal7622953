@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>DS Admin Panel</title>
+  <link rel="stylesheet" href="./styles.css" />
+</head>
+<body>
+  <div class="topbar">
+    <div class="brand" id="brandBox">
+      <img id="brandLogo" alt="logo" style="display:none"/>
+      <div class="title">
+        <div style="font-size:16px">DS Admin Panel</div>
+        <div class="sub" id="brandTag">Portal settings & control</div>
+      </div>
+    </div>
+
+    <div class="actions">
+      <button class="btn ghost" id="goHome">🏠 Home</button>
+      <button class="btn" id="openStudent">Open Student</button>
+      <button class="btn" id="btnApi">API Settings</button>
+      <button class="btn danger" id="btnLogout">Logout</button>
+    </div>
+  </div>
+
+  <div class="layout">
+    <aside class="sidebar">
+      <div class="card">
+        <div class="menuTitle">Menu</div>
+        <div class="nav" id="nav"></div>
+
+        <div class="menuTitle">More</div>
+        <div class="nav" id="navMore"></div>
+      </div>
+    </aside>
+
+    <main class="main">
+      <div class="headerRow">
+        <div>
+          <div class="h1" id="viewTitle">Admin Home</div>
+          <div class="p" id="viewSub">Branding • Students • Courses • Portal Builder</div>
+        </div>
+        <div class="badge ok" id="status">READY</div>
+      </div>
+
+      <div class="card section" id="view"></div>
+    </main>
+  </div>
+
+  <!-- API modal -->
+  <div id="modal" style="position:fixed; inset:0; display:none; align-items:center; justify-content:center; background:rgba(15,23,42,.4); z-index:99;">
+    <div class="card" style="width:min(720px,92vw); padding:14px;">
+      <div class="headerRow" style="margin:0">
+        <div>
+          <div class="h1" style="font-size:18px">API Settings (Admin only)</div>
+          <div class="p">Student will NOT see this. This saves to browser storage.</div>
+        </div>
+        <button class="btn" id="closeModal">✕</button>
+      </div>
+
+      <div class="hr"></div>
+
+      <div class="row">
+        <div class="field">
+          <label>Apps Script Web App URL</label>
+          <input id="apiUrl" placeholder="https://script.google.com/macros/s/XXXX/exec" />
+        </div>
+        <div class="field">
+          <label>Admin Token</label>
+          <input id="adminToken" placeholder="set any secret token" />
+        </div>
+      </div>
+      <div class="row">
+        <button class="btn primary" id="saveApi">Save</button>
+        <button class="btn" id="clearApi">Clear</button>
+      </div>
+
+      <div class="notice" style="margin-top:10px">
+        <div class="muted">Note:</div>
+        <div class="p" style="margin:0">
+          Phase-1 में यह localStorage में save होगा। Phase-2 में इसे Google Sheet/App Script में secure करेंगे।
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script type="module" src="./admin.js"></script>
+</body>
+</html>
