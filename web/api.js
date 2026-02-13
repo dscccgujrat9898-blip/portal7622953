@@ -1,59 +1,52 @@
-export function saveConfig(key, val){
-  localStorage.setItem(key, val || "");
+export const KEYS = {
+  BRAND: "DSP_BRAND",
+  API_URL: "DSP_API_URL",
+  ADMIN_TOKEN: "DSP_ADMIN_TOKEN",
+  PORTAL_MENU: "DSP_PORTAL_MENU"
+};
+
+export function loadJSON(key, fallback){
+  try{
+    const v = localStorage.getItem(key);
+    return v ? JSON.parse(v) : fallback;
+  }catch(e){
+    return fallback;
+  }
 }
-export function loadConfig(key, fallback=""){
-  return localStorage.getItem(key) || fallback;
-}
-
-function jsonp(url){
-  return new Promise((resolve, reject)=>{
-    const cb = "__cb_" + Math.random().toString(36).slice(2);
-    const script = document.createElement("script");
-    const timeout = setTimeout(()=>{
-      cleanup();
-      reject(new Error("JSONP timeout"));
-    }, 15000);
-
-    function cleanup(){
-      clearTimeout(timeout);
-      delete window[cb];
-      if(script && script.parentNode) script.parentNode.removeChild(script);
-    }
-
-    window[cb] = (data)=>{
-      cleanup();
-      resolve(data);
-    };
-
-    const sep = url.includes("?") ? "&" : "?";
-    script.src = url + sep + "callback=" + cb;
-    script.onerror = ()=>{
-      cleanup();
-      reject(new Error("JSONP load failed"));
-    };
-    document.body.appendChild(script);
-  });
+export function saveJSON(key, value){
+  localStorage.setItem(key, JSON.stringify(value));
 }
 
-export function apiClient(baseUrl){
-  const base = (baseUrl||"").replace(/\/+$/,""); // trim trailing slash
+export function loadText(key, fallback=""){
+  const v = localStorage.getItem(key);
+  return v ?? fallback;
+}
+export function saveText(key, value){
+  localStorage.setItem(key, value);
+}
+
+export function defaultBrand(){
   return {
-    async get(op, params={}){
-      const u = new URL(base);
-      u.searchParams.set("op", op);
-      Object.keys(params||{}).forEach(k=> u.searchParams.set(k, params[k]));
-      return await jsonp(u.toString()); // CORS-free
-    },
-    async post(op, body={}){
-      // no-cors: request will go, but response can't be read
-      const payload = JSON.stringify({ op, ...body });
-      await fetch(base, {
-        method: "POST",
-        mode: "no-cors",
-        headers: { "Content-Type": "text/plain;charset=utf-8" },
-        body: payload
-      });
-      return { ok:true, note:"no-cors write sent" };
-    }
+    portalName: "DS Students Portal",
+    tagline: "Learn • Practice • Achieve",
+    logoDataUrl: "",         // base64
+    bannerText: "Welcome to DS Students Portal",
+    primary: "#2563eb"
   };
+}
+
+export function defaultMenu(){
+  // Student menu items (admin controlled)
+  return [
+    {id:"home", label:"Dashboard", type:"internal", visible:true},
+    {id:"courses", label:"My Courses", type:"internal", visible:true},
+    {id:"subjects", label:"Subjects", type:"internal", visible:true},
+    {id:"notes", label:"Notes Library", type:"internal", visible:true},
+    {id:"exams", label:"Quizzes / Exams", type:"internal", visible:true},
+    {id:"admission", label:"Admission Form", type:"internal", visible:true},
+    {id:"history", label:"History / Attempts", type:"internal", visible:true},
+    {id:"certs", label:"Certificates & Marksheet", type:"internal", visible:true},
+    {id:"support", label:"Support Center", type:"internal", visible:true},
+    {id:"settings", label:"Settings", type:"internal", visible:true}
+  ];
 }
