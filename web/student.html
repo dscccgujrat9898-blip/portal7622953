@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>DS Students Portal</title>
+  <link rel="stylesheet" href="./styles.css" />
+</head>
+<body>
+  <div class="topbar">
+    <div class="brand" id="brandBox">
+      <img id="brandLogo" alt="logo" style="display:none"/>
+      <div class="title">
+        <div style="font-size:16px" id="brandName">DS Students Portal</div>
+        <div class="sub" id="brandTag">Learn • Practice • Achieve</div>
+      </div>
+    </div>
+
+    <div class="actions">
+      <button class="btn ghost" id="goHome">🏠 Home</button>
+      <span class="badge" id="studentChip">Guest</span>
+      <button class="btn danger" id="btnLogout">Logout</button>
+    </div>
+  </div>
+
+  <div class="layout">
+    <aside class="sidebar">
+      <div class="card">
+        <div class="menuTitle">Menu</div>
+        <div class="nav" id="nav"></div>
+
+        <div class="menuTitle">More</div>
+        <div class="nav" id="navMore"></div>
+      </div>
+    </aside>
+
+    <main class="main">
+      <div class="headerRow">
+        <div>
+          <div class="h1" id="viewTitle">Dashboard</div>
+          <div class="p" id="viewSub">Welcome</div>
+        </div>
+        <div class="badge ok" id="status">READY</div>
+      </div>
+
+      <div class="card section" id="view"></div>
+    </main>
+  </div>
+
+  <script type="module" src="./student.js"></script>
+</body>
+</html>
