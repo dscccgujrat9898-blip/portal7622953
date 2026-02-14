@@ -15,6 +15,10 @@ const adminToken = document.getElementById("adminToken");
 const saveApi = document.getElementById("saveApi");
 const clearApi = document.getElementById("clearApi");
 
+// ✅ FIX: hard-fixed localStorage keys (student/admin दोनों में same रहेंगी)
+const API_URL_KEY = "DSP_API_URL";
+const ADMIN_TOKEN_KEY = "DSP_ADMIN_TOKEN";
+
 document.getElementById("openStudent").onclick = () => {
   // same folder
   const u = new URL(location.href);
@@ -23,7 +27,7 @@ document.getElementById("openStudent").onclick = () => {
 };
 document.getElementById("goHome").onclick = () => render("home");
 document.getElementById("btnLogout").onclick = () => {
-  localStorage.removeItem(KEYS.ADMIN_TOKEN);
+  localStorage.removeItem(ADMIN_TOKEN_KEY);
   alert("Logged out (admin token cleared).");
 };
 
@@ -34,14 +38,17 @@ saveApi.onclick = () => {
   const u = apiUrl.value.trim();
   const t = adminToken.value.trim();
   if(!u || !t) return alert("API URL + Admin Token required");
-  saveText(KEYS.API_URL, u);
-  saveText(KEYS.ADMIN_TOKEN, t);
+
+  // ✅ FIX: save to fixed keys
+  saveText(API_URL_KEY, u);
+  saveText(ADMIN_TOKEN_KEY, t);
+
   modal.style.display="none";
   alert("Saved ✅");
 };
 clearApi.onclick = () => {
-  localStorage.removeItem(KEYS.API_URL);
-  localStorage.removeItem(KEYS.ADMIN_TOKEN);
+  localStorage.removeItem(API_URL_KEY);
+  localStorage.removeItem(ADMIN_TOKEN_KEY);
   apiUrl.value = "";
   adminToken.value = "";
   alert("Cleared");
@@ -54,9 +61,9 @@ function ensure(){
   const menu = loadJSON(KEYS.PORTAL_MENU, null) ?? defaultMenu();
   saveJSON(KEYS.PORTAL_MENU, menu);
 
-  // preload modal values
-  apiUrl.value = loadText(KEYS.API_URL, "");
-  adminToken.value = loadText(KEYS.ADMIN_TOKEN, "");
+  // ✅ FIX: preload modal values from fixed keys
+  apiUrl.value = loadText(API_URL_KEY, "");
+  adminToken.value = loadText(ADMIN_TOKEN_KEY, "");
 
   // show status
   status.textContent = "READY";
@@ -115,7 +122,10 @@ function render(id){
 
   if(id==="home"){
     setTitle("Admin Home", "Overview (Phase-1 offline demo)");
-    const apiSet = !!loadText(KEYS.API_URL,"") && !!loadText(KEYS.ADMIN_TOKEN,"");
+
+    // ✅ FIX: apiSet fixed keys से
+    const apiSet = !!loadText(API_URL_KEY,"") && !!loadText(ADMIN_TOKEN_KEY,"");
+
     view.innerHTML = `
       <div class="grid3">
         <div class="kv"><div><div class="muted">API</div><div style="font-weight:900">${apiSet?"Configured":"Not set"}</div></div><span class="badge ${apiSet?"ok":"warn"}">${apiSet?"OK":"SET"}</span></div>
